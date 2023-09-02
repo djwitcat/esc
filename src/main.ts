@@ -1,7 +1,7 @@
-import { interval, take } from "rxjs";
+// const step = (deltaTime: number) => {
+//   // TODO: 把dt传递给各个模块
+// };
 
-const numbers = interval(1000);
-
-const takeFourNumbers = numbers.pipe(take(10));
-
-takeFourNumbers.subscribe((x) => console.log("Next: ", x));
+export default {
+  // step,
+};

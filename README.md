@@ -1,6 +1,7 @@
 # Eternal Sun Core
 
 ![结构](./docs/structure.png)
+![模块](./docs/modules.png)
 
 ## 通过一个独立的 JS 核心控制全部游戏逻辑
 
