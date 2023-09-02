@@ -1,4 +1,4 @@
-import { interval, take } from "rxjs";
+import { interval, take, sample } from "rxjs";
 
 const numbers = interval(1000);
 
