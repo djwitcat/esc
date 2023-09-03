@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "vite-node src/main.ts -w",
     "build": "tsc && vite build",
-    "preview": "vite preview",
-    "postinstall": "husky install"
+    "postinstall": "husky install",
+    "test": "vitest"
   },
   "devDependencies": {
     "@types/ramda": "^0.29.3",
