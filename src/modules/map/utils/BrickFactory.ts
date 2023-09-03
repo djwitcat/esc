@@ -1,50 +1,6 @@
 import { map } from "ramda";
-
-type Pattern = (0 | 1)[][];
-type Payload = {
-  index: number;
-};
-type Brick = (Payload | null)[][];
-
-const patterns: Pattern[] = [
-  [[1, 1, 1]],
-  [
-    [1, 1, 1],
-    [0, 1, 0],
-  ],
-  [
-    [1, 1, 1],
-    [1, 0, 1],
-  ],
-  [
-    [1, 1],
-    [1, 0],
-  ],
-  [
-    [1, 1],
-    [0, 1],
-  ],
-  [
-    [1, 1, 1, 1],
-    [0, 1, 0, 0],
-  ],
-  [
-    [1, 1, 1, 1],
-    [0, 0, 1, 0],
-  ],
-  [
-    [1, 1],
-    [1, 0],
-    [1, 0],
-    [1, 0],
-  ],
-  [
-    [1, 1],
-    [0, 1],
-    [0, 1],
-    [0, 1],
-  ],
-];
+import { patterns } from "./brickPatterns";
+import { Brick } from "./types";
 
 /**
  * 砖块生成函数
