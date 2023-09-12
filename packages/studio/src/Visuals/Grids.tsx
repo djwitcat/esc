@@ -7,6 +7,10 @@ type DrawFunc = NonNullable<ComponentProps<typeof Graphics>["draw"]>;
 export const Grids = () => {
   const draw: DrawFunc = useCallback((g) => {
     g.clear();
+    // 画一个黑色背景
+    g.beginFill(0x000000);
+    g.drawRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    g.endFill();
     // 把 CANVAS_WIDTH 分成 10 份，画白色竖线
     for (let i = 0; i <= 10; i++) {
       g.lineStyle(1, 0xffffff);
