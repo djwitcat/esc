@@ -1,13 +1,29 @@
 import * as PIXI from "pixi.js";
-import { CANVAS_HEIGHT, CANVAS_WIDTH } from "../constants";
-import { Viewport } from "pixi-viewport";
+import { CANVAS_HEIGHT, CANVAS_WIDTH, CELL_SIZE } from "../constants";
+import { CellHighlight } from "./CellHighlight";
+import { Subject } from "rxjs";
+import { Viewport } from "./Viewport";
 
-const createMainContainer = () => {
+const createMainContainer = (
+  setSelectedCell: (cell: { x: number; y: number }) => void
+) => {
   const container = new PIXI.Container();
   container.pivot.set(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2);
   container.position.set(window.innerWidth / 2, window.innerHeight / 2);
   container.width = CANVAS_WIDTH;
   container.height = CANVAS_HEIGHT;
+
+  container.on("click", (e) => {
+    const localPoint = container.toLocal(e.global);
+    const x = Math.floor(localPoint.x / CELL_SIZE);
+    const y = Math.floor(localPoint.y / CELL_SIZE);
+    setSelectedCell({ x, y });
+  });
+  container.eventMode = "dynamic";
+
+  const grids = createGrids();
+  container.addChild(grids);
+
   return container;
 };
 
@@ -18,32 +34,16 @@ const createGrids = () => {
   grids.endFill();
   for (let i = 0; i <= 10; i++) {
     grids.lineStyle(4, 0xffffff);
-    grids.moveTo((CANVAS_WIDTH / 10) * i, 0);
-    grids.lineTo((CANVAS_WIDTH / 10) * i, CANVAS_HEIGHT);
+    grids.moveTo(CELL_SIZE * i, 0);
+    grids.lineTo(CELL_SIZE * i, CANVAS_HEIGHT);
   }
 
-  for (let i = 0; i <= Math.floor(CANVAS_HEIGHT / (CANVAS_WIDTH / 10)); i++) {
+  for (let i = 0; i <= Math.floor(CANVAS_HEIGHT / CELL_SIZE); i++) {
     grids.lineStyle(4, 0xffffff);
-    grids.moveTo(0, (CANVAS_WIDTH / 10) * i);
-    grids.lineTo(CANVAS_WIDTH, (CANVAS_WIDTH / 10) * i);
+    grids.moveTo(0, CELL_SIZE * i);
+    grids.lineTo(CANVAS_WIDTH, CELL_SIZE * i);
   }
   return grids;
-};
-
-const createViewport = (app: PIXI.Application) => {
-  const viewport = new Viewport({
-    events: app.renderer.events,
-  });
-
-  viewport
-    .drag()
-    .wheel()
-    .clampZoom({
-      minScale: 0.5,
-      maxScale: 1.2,
-    })
-    .setZoom(0.6, true);
-  return viewport;
 };
 
 export const initStage = () => {
@@ -52,15 +52,17 @@ export const initStage = () => {
     resizeTo: window,
   });
 
-  const container = createMainContainer();
-  const grids = createGrids();
-  const viewport = createViewport(app);
+  const selectedCell = new Subject<{ x: number; y: number } | null>();
 
-  container.addChild(grids);
+  const container = createMainContainer((v) => selectedCell.next(v));
+
+  const viewport = new Viewport(app);
+  const cellHighlight = new CellHighlight(selectedCell);
+
+  container.addChild(cellHighlight);
   viewport.addChild(container);
-
   app.stage.addChild(viewport);
-
+  viewport.on("pointerdown", () => selectedCell.next(null));
   document.body.appendChild(app.view);
   return app;
 };
