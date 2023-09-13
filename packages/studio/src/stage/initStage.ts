@@ -4,6 +4,27 @@ import { CellHighlight } from "./CellHighlight";
 import { Subject } from "rxjs";
 import { Viewport } from "./Viewport";
 
+export const initStage = () => {
+  const app = new PIXI.Application<HTMLCanvasElement>({
+    background: "#333333",
+    resizeTo: window,
+  });
+
+  const selectedCell = new Subject<{ x: number; y: number } | null>();
+
+  const container = createMainContainer((v) => selectedCell.next(v));
+
+  const viewport = new Viewport(app);
+  const cellHighlight = new CellHighlight(selectedCell);
+
+  container.addChild(cellHighlight);
+  viewport.addChild(container);
+  app.stage.addChild(viewport);
+  viewport.on("pointerdown", () => selectedCell.next(null));
+  document.body.appendChild(app.view);
+  return app;
+};
+
 const createMainContainer = (
   setSelectedCell: (cell: { x: number; y: number }) => void
 ) => {
@@ -44,25 +65,4 @@ const createGrids = () => {
     grids.lineTo(CANVAS_WIDTH, CELL_SIZE * i);
   }
   return grids;
-};
-
-export const initStage = () => {
-  const app = new PIXI.Application<HTMLCanvasElement>({
-    background: "#333333",
-    resizeTo: window,
-  });
-
-  const selectedCell = new Subject<{ x: number; y: number } | null>();
-
-  const container = createMainContainer((v) => selectedCell.next(v));
-
-  const viewport = new Viewport(app);
-  const cellHighlight = new CellHighlight(selectedCell);
-
-  container.addChild(cellHighlight);
-  viewport.addChild(container);
-  app.stage.addChild(viewport);
-  viewport.on("pointerdown", () => selectedCell.next(null));
-  document.body.appendChild(app.view);
-  return app;
 };
