@@ -22,7 +22,11 @@ export const initStage = () => {
   app.stage.addChild(viewport);
   viewport.on("pointerdown", () => setState({ focus: null }));
   document.body.appendChild(app.view);
-  return app;
+  return () => {
+    container.destroy(true);
+    viewport.destroy();
+    document.body.removeChild(app.view);
+  };
 };
 
 const createMainContainer = (

@@ -6,7 +6,7 @@ export class CellHighlight extends PIXI.Graphics {
   constructor() {
     super();
     const { subscribe } = store;
-    subscribe(({ focus }) => {
+    const unsub = subscribe(({ focus }) => {
       this.clear();
       if (!focus) return;
       // 画半透明的格子
@@ -19,5 +19,6 @@ export class CellHighlight extends PIXI.Graphics {
       );
       this.endFill();
     });
+    this.on("destroyed", unsub);
   }
 }

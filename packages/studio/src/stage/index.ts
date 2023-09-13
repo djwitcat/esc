@@ -3,9 +3,9 @@ import { initStage } from "./initStage";
 
 export const useStage = () => {
   useEffect(() => {
-    const app = initStage();
+    const unload = initStage();
     return () => {
-      document.body.removeChild(app.view);
+      unload();
     };
   }, []);
 };
