@@ -1,4 +1,4 @@
-import { createStore } from "zustand";
+import { createStore, useStore } from "zustand";
 
 interface States {
   focus: { x: number; y: number } | null;
@@ -13,3 +13,6 @@ export const store = createStore<States>()(() => ({
     handMode: false,
   },
 }));
+
+export const useBoundedStore = <T>(selector: (state: States) => T) =>
+  useStore(store, selector);

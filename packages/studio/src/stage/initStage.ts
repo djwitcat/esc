@@ -10,9 +10,13 @@ export const initStage = () => {
     resizeTo: window,
   });
 
-  const { setState } = store;
+  const { setState, getState } = store;
 
-  const container = createMainContainer((v) => setState({ focus: v }));
+  const container = createMainContainer((v) => {
+    //独立一个container class吧，handMove时设置eventmode为none
+    if (getState().editor.handMode) return;
+    setState({ focus: v });
+  });
 
   const viewport = new Viewport(app);
   const cellHighlight = new CellHighlight();
@@ -20,7 +24,7 @@ export const initStage = () => {
   container.addChild(cellHighlight);
   viewport.addChild(container);
   app.stage.addChild(viewport);
-  viewport.on("pointerdown", () => setState({ focus: null }));
+
   document.body.appendChild(app.view);
   return () => {
     container.destroy(true);
