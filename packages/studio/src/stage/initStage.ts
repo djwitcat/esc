@@ -1,8 +1,8 @@
 import * as PIXI from "pixi.js";
 import { CANVAS_HEIGHT, CANVAS_WIDTH, CELL_SIZE } from "../constants";
 import { CellHighlight } from "./CellHighlight";
-import { Subject } from "rxjs";
 import { Viewport } from "./Viewport";
+import { store } from "../store";
 
 export const initStage = () => {
   const app = new PIXI.Application<HTMLCanvasElement>({
@@ -10,17 +10,17 @@ export const initStage = () => {
     resizeTo: window,
   });
 
-  const selectedCell = new Subject<{ x: number; y: number } | null>();
+  const { setState } = store;
 
-  const container = createMainContainer((v) => selectedCell.next(v));
+  const container = createMainContainer((v) => setState({ focus: v }));
 
   const viewport = new Viewport(app);
-  const cellHighlight = new CellHighlight(selectedCell);
+  const cellHighlight = new CellHighlight();
 
   container.addChild(cellHighlight);
   viewport.addChild(container);
   app.stage.addChild(viewport);
-  viewport.on("pointerdown", () => selectedCell.next(null));
+  viewport.on("pointerdown", () => setState({ focus: null }));
   document.body.appendChild(app.view);
   return app;
 };
