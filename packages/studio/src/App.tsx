@@ -4,6 +4,7 @@ import styles from "./App.module.css";
 import { Provider, ToggleButton, darkTheme } from "@adobe/react-spectrum";
 import Hand from "@spectrum-icons/workflow/Hand";
 import { store, useBoundedStore } from "./store";
+import { useHotkeys } from "react-hotkeys-hook";
 
 function App() {
   useStage();
@@ -12,6 +13,10 @@ function App() {
     store.setState((state) => ({
       editor: { handMode: !state.editor.handMode },
     }));
+  useHotkeys("space", (e) => !e.repeat && toggle(), {
+    keydown: true,
+    keyup: true,
+  });
   return (
     <Provider theme={darkTheme}>
       <div className={styles.lb} style={{ cursor: "copy" }}>
