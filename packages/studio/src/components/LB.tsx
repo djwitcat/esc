@@ -41,7 +41,6 @@ const Info = () => (
       title="核心问题在于"
       primaryActionLabel="原来如此"
       variant="information"
-      minWidth={750}
     >
       <Text>
         你知道方块战机是一个复刻的游戏吗？它的玩法基本照搬了Konami在1989年发布的一款街机游戏《Quarth》。

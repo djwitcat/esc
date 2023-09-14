@@ -5,7 +5,7 @@ import { store } from "../store";
 export class MainContainer extends Container {
   constructor() {
     super();
-    this.eventMode = "dynamic";
+    this.eventMode = "static";
     this.init();
   }
 
