@@ -3,15 +3,15 @@ import { CANVAS_HEIGHT, CANVAS_WIDTH, CELL_SIZE } from "../constants";
 import { store } from "../store";
 
 export class MainContainer extends Container {
-  constructor() {
+  constructor(parent: HTMLDivElement) {
     super();
     this.eventMode = "static";
-    this.init();
+    this.init(parent);
   }
 
-  init() {
+  init(parent: HTMLDivElement) {
     this.pivot.set(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2);
-    this.position.set(window.innerWidth / 2, window.innerHeight / 2);
+    this.position.set(parent.offsetWidth / 2, window.innerHeight / 2);
     this.width = CANVAS_WIDTH;
     this.height = CANVAS_HEIGHT;
 

@@ -4,13 +4,14 @@ import { Viewport } from "./Viewport";
 import { MainContainer } from "./MainContainer";
 import { createGrids } from "./nonInteractElements";
 
-export const initStage = () => {
+export const initStage = (parent: HTMLDivElement | null) => {
+  if (!parent) return () => {};
   const app = new PIXI.Application<HTMLCanvasElement>({
     background: "#333333",
-    resizeTo: window,
+    resizeTo: parent,
   });
 
-  const container = new MainContainer();
+  const container = new MainContainer(parent);
   const viewport = new Viewport(app);
   const cellHighlight = new CellHighlight();
 
@@ -19,10 +20,10 @@ export const initStage = () => {
   viewport.addChild(container);
   app.stage.addChild(viewport);
 
-  document.body.appendChild(app.view);
+  parent.appendChild(app.view);
   return () => {
     container.destroy(true);
     viewport.destroy();
-    document.body.removeChild(app.view);
+    parent.removeChild(app.view);
   };
 };

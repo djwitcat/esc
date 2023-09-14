@@ -24,7 +24,7 @@ export class Viewport extends PixiViewport {
       if (e.target !== this) return;
       setState({ focus: null });
     });
-
+    this.pause = true;
     this.on("destroyed", unsub);
   }
 }

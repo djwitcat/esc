@@ -23,7 +23,7 @@ export const LB = () => {
     keyup: true,
   });
   return (
-    <div className={styles.lb} style={{ cursor: "copy" }}>
+    <div className={styles.lb}>
       <Info />
       <ToggleButton isSelected={isHandMode} onPress={() => toggle()}>
         <Hand />
