@@ -20,7 +20,7 @@ function App() {
           <div className={styles.bricks}>
             {Object.values(presetBrickInfo).map((info) => (
               <div className={styles.brick}>
-                <img src={`/assets/${info.name}.png`} />
+                <img src={info.thumbnail} />
               </div>
             ))}
           </div>
