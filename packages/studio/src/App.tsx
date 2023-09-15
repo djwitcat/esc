@@ -4,7 +4,6 @@ import styles from "./App.module.css";
 import { Provider, darkTheme } from "@adobe/react-spectrum";
 import { LB } from "./components/LB";
 import { useRef } from "react";
-import { presetBrickInfo } from "./presets";
 
 function App() {
   const stageParent = useRef<HTMLDivElement>(null);
@@ -15,15 +14,6 @@ function App() {
         <div className={styles.main} ref={stageParent}>
           <LB />
           <img src={Logo} className={styles.logo} />
-        </div>
-        <div className={styles.side}>
-          <div className={styles.bricks}>
-            {Object.values(presetBrickInfo).map((info) => (
-              <div className={styles.brick}>
-                <img src={info.thumbnail} />
-              </div>
-            ))}
-          </div>
         </div>
       </div>
     </Provider>
