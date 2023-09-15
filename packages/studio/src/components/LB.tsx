@@ -14,20 +14,27 @@ import Add from "@spectrum-icons/workflow/Add";
 import Hand from "@spectrum-icons/workflow/Hand";
 import InfoIcon from "@spectrum-icons/workflow/Info";
 
-import { store, useBoundedStore } from "../store";
+import { MODE, store, useBoundedStore } from "../store";
 import { useHotkeys } from "react-hotkeys-hook";
-import { presetBrickInfo, presetBrickShortcutMap } from "../presets";
+import { BRICK, presetBrickInfo, presetBrickShortcutMap } from "../presets";
 
 export const LB = () => {
-  const isHandMode = useBoundedStore((states) => states.editor.handMode);
+  const isHandMode = useBoundedStore(
+    (states) => states.editor.mode === MODE.HAND
+  );
   const toggle = () =>
-    store.setState((state) => ({
-      editor: { handMode: !state.editor.handMode },
+    store.setState(() => ({
+      editor: { mode: isHandMode ? MODE.NORMAL : MODE.HAND, creating: null },
     }));
   useHotkeys("space", (e) => !e.repeat && toggle(), {
     keydown: true,
     keyup: true,
   });
+  const setCreatingBrickType = (type: BRICK) => {
+    store.setState(() => ({
+      editor: { mode: MODE.CREATE, creating: type },
+    }));
+  };
   return (
     <div className={styles.lb}>
       <Info />
@@ -39,7 +46,7 @@ export const LB = () => {
           <Add />
           <Text>新砖块</Text>
         </ActionButton>
-        <Menu onAction={(key) => alert(key)}>
+        <Menu onAction={(k) => setCreatingBrickType(k as BRICK)}>
           {Object.values(presetBrickInfo).map((i) => (
             <Item textValue={i.name} key={i.name}>
               <div

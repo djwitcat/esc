@@ -7,6 +7,10 @@ export class Brick extends Graphics {
     super();
     const data = presetBrickData[type];
     const info = presetBrickInfo[type];
+    this.pivot.set(
+      (data[0].length * CELL_SIZE) / 2,
+      (data.length * CELL_SIZE) / 2
+    );
     this.create(data, info.color);
   }
 

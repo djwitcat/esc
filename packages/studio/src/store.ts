@@ -1,16 +1,23 @@
 import { createStore, useStore } from "zustand";
+import { BRICK } from "./presets";
+
+export enum MODE {
+  NORMAL,
+  HAND,
+  CREATE,
+}
 
 interface States {
-  focus: { x: number; y: number } | null;
   editor: {
-    handMode: boolean;
+    mode: MODE;
+    creating: BRICK | null;
   };
 }
 
 export const store = createStore<States>()(() => ({
-  focus: null,
   editor: {
-    handMode: false,
+    mode: MODE.NORMAL,
+    creating: null,
   },
 }));
 

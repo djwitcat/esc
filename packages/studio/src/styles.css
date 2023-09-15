@@ -1,5 +1,6 @@
 :root {
   background: black;
+  user-select: none;
 }
 
 body {
