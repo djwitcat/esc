@@ -1,16 +1,22 @@
-import styles from "../App.module.css";
+import styles from "./lb.module.css";
 import {
   ToggleButton,
   Text,
   DialogTrigger,
   ActionButton,
   AlertDialog,
+  MenuTrigger,
+  Menu,
+  Item,
+  Keyboard,
 } from "@adobe/react-spectrum";
+import Add from "@spectrum-icons/workflow/Add";
 import Hand from "@spectrum-icons/workflow/Hand";
 import InfoIcon from "@spectrum-icons/workflow/Info";
 
 import { store, useBoundedStore } from "../store";
 import { useHotkeys } from "react-hotkeys-hook";
+import { presetBrickInfo, presetBrickShortcutMap } from "../presets";
 
 export const LB = () => {
   const isHandMode = useBoundedStore((states) => states.editor.handMode);
@@ -28,6 +34,26 @@ export const LB = () => {
       <ToggleButton isSelected={isHandMode} onPress={() => toggle()}>
         <Hand />
       </ToggleButton>
+      <MenuTrigger>
+        <ActionButton>
+          <Add />
+          <Text>新砖块</Text>
+        </ActionButton>
+        <Menu onAction={(key) => alert(key)}>
+          {Object.values(presetBrickInfo).map((i) => (
+            <Item textValue={i.name} key={i.name}>
+              <div
+                className={styles.color}
+                style={{
+                  background: i.color,
+                }}
+              />
+              <Text>{i.name}</Text>
+              <Keyboard>⌘{presetBrickShortcutMap[i.name]}</Keyboard>
+            </Item>
+          ))}
+        </Menu>
+      </MenuTrigger>
     </div>
   );
 };

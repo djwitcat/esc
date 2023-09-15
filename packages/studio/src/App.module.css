@@ -19,12 +19,3 @@
   flex: 1;
   position: relative;
 }
-
-.lb {
-  position: absolute;
-  bottom: 32px;
-  left: 32px;
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}

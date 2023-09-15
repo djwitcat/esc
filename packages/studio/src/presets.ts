@@ -10,6 +10,20 @@ export const enum BRICK {
   I = "I",
 }
 
+export const presetBrickShortcutMap: {
+  [key in BRICK]: string;
+} = {
+  [BRICK.A]: "1",
+  [BRICK.B]: "2",
+  [BRICK.C]: "3",
+  [BRICK.D]: "4",
+  [BRICK.E]: "5",
+  [BRICK.F]: "6",
+  [BRICK.G]: "7",
+  [BRICK.H]: "8",
+  [BRICK.I]: "9",
+};
+
 export const presetBrickInfo: {
   [key in BRICK]: { name: BRICK; color: string };
 } = {
