@@ -16,7 +16,9 @@ import InfoIcon from "@spectrum-icons/workflow/Info";
 
 import { MODE, store, useBoundedStore } from "../store";
 import { useHotkeys } from "react-hotkeys-hook";
-import { BRICK, presetBrickInfo, presetBrickShortcutMap } from "../presets";
+import { BRICK, presetBrickInfo } from "../presets";
+import { useState } from "react";
+import { Key } from "ts-key-enum";
 
 export const LB = () => {
   const isHandMode = useBoundedStore(
@@ -26,22 +28,24 @@ export const LB = () => {
     store.setState(() => ({
       editor: { mode: isHandMode ? MODE.NORMAL : MODE.HAND, creating: null },
     }));
-  useHotkeys("space", (e) => !e.repeat && toggle(), {
+  useHotkeys(Key.Backspace, (e) => !e.repeat && toggle(), {
     keydown: true,
     keyup: true,
   });
+  useHotkeys("n", () => setShowCreatingMenu(true));
   const setCreatingBrickType = (type: BRICK) => {
     store.setState(() => ({
       editor: { mode: MODE.CREATE, creating: type },
     }));
   };
+  const [showCreatingMenu, setShowCreatingMenu] = useState(false);
   return (
     <div className={styles.lb}>
       <Info />
       <ToggleButton isSelected={isHandMode} onPress={() => toggle()}>
         <Hand />
       </ToggleButton>
-      <MenuTrigger>
+      <MenuTrigger isOpen={showCreatingMenu} onOpenChange={setShowCreatingMenu}>
         <ActionButton>
           <Add />
           <Text>新砖块</Text>
@@ -56,7 +60,7 @@ export const LB = () => {
                 }}
               />
               <Text>{i.name}</Text>
-              <Keyboard>⌘{presetBrickShortcutMap[i.name]}</Keyboard>
+              <Keyboard>Shift + {i.name.toLowerCase()}</Keyboard>
             </Item>
           ))}
         </Menu>

@@ -84,6 +84,9 @@ importers:
       react-hotkeys-hook:
         specifier: ^4.4.1
         version: 4.4.1(react-dom@18.2.0)(react@18.2.0)
+      ts-key-enum:
+        specifier: ^2.0.12
+        version: 2.0.12
       zustand:
         specifier: ^4.4.1
         version: 4.4.1(@types/react@18.2.21)(react@18.2.0)
@@ -5368,6 +5371,10 @@ packages:
     dependencies:
       typescript: 5.2.2
     dev: true
+
+  /ts-key-enum@2.0.12:
+    resolution: {integrity: sha512-Ety4IvKMaeG34AyXMp5r11XiVZNDRL+XWxXbVVJjLvq2vxKRttEANBE7Za1bxCAZRdH2/sZT6jFyyTWxXz28hw==}
+    dev: false
 
   /ts-toolbelt@9.6.0:
     resolution: {integrity: sha512-nsZd8ZeNUzukXPlJmTBwUAuABDe/9qtVDelJeT/qW0ow3ZS3BsQJtNkan1802aM9Uf68/Y8ljw86Hu0h5IUW3w==}
