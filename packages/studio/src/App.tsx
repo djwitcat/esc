@@ -2,7 +2,7 @@ import { useStage } from "./stage";
 import Logo from "../assets/logo.png";
 import styles from "./App.module.css";
 import { Provider, darkTheme } from "@adobe/react-spectrum";
-import { LB } from "./components/Tools";
+import { Tools } from "./parts/Tools";
 import { useRef } from "react";
 
 function App() {
@@ -12,7 +12,7 @@ function App() {
     <Provider theme={darkTheme}>
       <div className={styles.container}>
         <div className={styles.main} ref={stageParent}>
-          <LB />
+          <Tools />
           <img src={Logo} className={styles.logo} />
         </div>
       </div>

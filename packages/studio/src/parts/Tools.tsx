@@ -1,4 +1,4 @@
-import styles from "./lb.module.css";
+import styles from "./tools.module.css";
 import {
   ToggleButton,
   Text,
@@ -20,7 +20,7 @@ import { BRICK, presetBrickInfo } from "../presets";
 import { useState } from "react";
 import { Key } from "ts-key-enum";
 
-export const LB = () => {
+export const Tools = () => {
   const [showCreatingMenu, setShowCreatingMenu] = useState(false);
 
   const isHandMode = useBoundedStore(
