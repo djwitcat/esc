@@ -21,6 +21,8 @@ import { useState } from "react";
 import { Key } from "ts-key-enum";
 
 export const LB = () => {
+  const [showCreatingMenu, setShowCreatingMenu] = useState(false);
+
   const isHandMode = useBoundedStore(
     (states) => states.editor.mode === MODE.HAND
   );
@@ -28,17 +30,51 @@ export const LB = () => {
     store.setState(() => ({
       editor: { mode: isHandMode ? MODE.NORMAL : MODE.HAND, creating: null },
     }));
-  useHotkeys(Key.Backspace, (e) => !e.repeat && toggle(), {
+
+  /**
+   * 取消快捷键
+   */
+  useHotkeys(Key.Escape, () => {
+    const mode = store.getState().editor.mode;
+    switch (mode) {
+      case MODE.CREATE:
+        store.setState(() => ({
+          editor: { mode: MODE.NORMAL, creating: null },
+        }));
+        break;
+    }
+  });
+
+  /**
+   * 砖块创建快捷键
+   */
+  useHotkeys(
+    Object.keys(presetBrickInfo).map((k) => `${Key.Shift}+${k}`),
+    ({ key }) =>
+      store.setState(() => ({
+        editor: { mode: MODE.CREATE, creating: key as BRICK },
+      }))
+  );
+
+  /**
+   * 空格拖拽快捷键
+   */
+  useHotkeys("space", (e) => !e.repeat && toggle(), {
     keydown: true,
     keyup: true,
   });
+
+  /**
+   * 砖块菜单快捷键
+   */
   useHotkeys("n", () => setShowCreatingMenu(true));
+
   const setCreatingBrickType = (type: BRICK) => {
     store.setState(() => ({
       editor: { mode: MODE.CREATE, creating: type },
     }));
   };
-  const [showCreatingMenu, setShowCreatingMenu] = useState(false);
+
   return (
     <div className={styles.lb}>
       <Info />
