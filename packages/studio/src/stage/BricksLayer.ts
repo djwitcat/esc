@@ -7,7 +7,7 @@ export class BricksLayer extends Container {
   constructor() {
     super();
     const unsub = store.subscribe((cur, prev) => {
-      if (prev.editor.mode !== MODE.CREATE) return;
+      if (prev.mode !== MODE.CREATE) return;
       const curBricksKeys = Object.keys(cur.bricks);
       const prevBricksKeys = Object.keys(prev.bricks);
       const newKeys = curBricksKeys.filter(

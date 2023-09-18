@@ -23,23 +23,23 @@ import { Key } from "ts-key-enum";
 export const Tools = () => {
   const [showCreatingMenu, setShowCreatingMenu] = useState(false);
 
-  const isHandMode = useBoundedStore(
-    (states) => states.editor.mode === MODE.HAND
-  );
+  const isHandMode = useBoundedStore((states) => states.mode === MODE.HAND);
   const toggle = () =>
     store.setState(() => ({
-      editor: { mode: isHandMode ? MODE.NORMAL : MODE.HAND, creating: null },
+      mode: isHandMode ? MODE.NORMAL : MODE.HAND,
+      creating: null,
     }));
 
   /**
    * 取消快捷键
    */
   useHotkeys(Key.Escape, () => {
-    const mode = store.getState().editor.mode;
+    const mode = store.getState().mode;
     switch (mode) {
       case MODE.CREATE:
         store.setState(() => ({
-          editor: { mode: MODE.NORMAL, creating: null },
+          mode: MODE.NORMAL,
+          creating: null,
         }));
         break;
     }
@@ -52,7 +52,8 @@ export const Tools = () => {
     Object.keys(presetBrickTypeInfo).map((k) => `${Key.Shift}+${k}`),
     ({ key }) =>
       store.setState(() => ({
-        editor: { mode: MODE.CREATE, creating: key as BrickType },
+        mode: MODE.CREATE,
+        creating: key as BrickType,
       }))
   );
 
@@ -71,7 +72,8 @@ export const Tools = () => {
 
   const setCreatingBrickType = (type: BrickType) => {
     store.setState(() => ({
-      editor: { mode: MODE.CREATE, creating: type },
+      mode: MODE.CREATE,
+      creating: type,
     }));
   };
 

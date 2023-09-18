@@ -38,14 +38,14 @@ export const initStage = (parent: HTMLDivElement | null) => {
 
 export const listenCreatingBrickPlaced = (container: MainContainer) => {
   store.subscribe((state) => {
-    if (state.editor.mode !== MODE.CREATE) {
+    if (state.mode !== MODE.CREATE) {
       container.off("click");
       return;
     }
     container.on("click", (e) => {
       // 获取相对container 点击位置
       const pointerInContainer = container.toLocal(e.global);
-      const brickType = store.getState().editor.creating;
+      const brickType = store.getState().creating;
       if (!brickType) return;
       const data = presetBrickTypeData[brickType];
       const leftTop = new PIXI.Point(
@@ -79,11 +79,11 @@ export const listenCreatingBrickMove = (
       newBrick.removeFromParent();
       viewport.off("globalpointermove");
     }
-    if (!state.editor.creating) {
+    if (!state.creating) {
       newBrick = null;
       return;
     }
-    newBrick = new Brick(state.editor.creating);
+    newBrick = new Brick(state.creating);
     // 防止container无法接收点击事件，禁用砖块所有交互。
     newBrick.eventMode = "none";
     viewport.addChild(newBrick);

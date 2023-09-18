@@ -10,23 +10,22 @@ export enum MODE {
 
 interface States {
   bricks: { [pos: string]: BrickDataBase };
-  editor: {
-    mode: MODE;
-    creating: BrickType | null;
-  };
+  mode: MODE;
+  creating: BrickType | null;
+  selectedBrick: string | null;
   createBrick: (type: BrickType, position: [number, number]) => void;
 }
 
 export const store = createStore<States>()((set) => ({
   bricks: {},
-  editor: {
-    mode: MODE.NORMAL,
-    creating: null,
-  },
+  mode: MODE.NORMAL,
+  creating: null,
+  selectedBrick: null,
   createBrick(type, position) {
     set((state) => ({
       bricks: { ...state.bricks, [nanoid()]: { type, position } },
-      editor: { creating: null, mode: MODE.NORMAL },
+      creating: null,
+      mode: MODE.NORMAL,
     }));
   },
 }));

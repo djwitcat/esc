@@ -9,7 +9,7 @@ export class Viewport extends PixiViewport {
     });
     const { subscribe } = store;
     const unsub = subscribe((s) => {
-      this.pause = s.editor.mode !== MODE.HAND;
+      this.pause = s.mode !== MODE.HAND;
     });
     this.drag()
       .wheel()
