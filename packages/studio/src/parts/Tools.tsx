@@ -42,6 +42,11 @@ export const Tools = () => {
           creating: null,
         }));
         break;
+      case MODE.NORMAL:
+        store.setState({
+          selectedBrick: null,
+        });
+        break;
     }
   });
 
@@ -56,6 +61,18 @@ export const Tools = () => {
         creating: key as BrickType,
       }))
   );
+
+  /**
+   * 砖块删除快捷键
+   */
+  useHotkeys(Key.Backspace, () => {
+    const { selectedBrick, mode } = store.getState();
+    if (mode === MODE.NORMAL && selectedBrick) {
+      store.setState((state) => {
+        delete state.bricks[selectedBrick];
+      });
+    }
+  });
 
   /**
    * 空格拖拽快捷键
