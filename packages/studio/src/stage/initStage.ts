@@ -3,9 +3,10 @@ import { Viewport } from "./Viewport";
 import { MainContainer } from "./MainContainer";
 import { createGrids } from "./nonInteractElements";
 import { Brick } from "./Brick";
-import { store } from "../store";
+import { MODE, store } from "../store";
 import { presetBrickTypeData } from "../presets";
-import { CELL_SIZE } from "../constants";
+import { CANVAS_HEIGHT, CANVAS_WIDTH, CELL_SIZE } from "../constants";
+import { BricksLayer } from "./BricksLayer";
 
 export const initStage = (parent: HTMLDivElement | null) => {
   if (!parent) return () => {};
@@ -16,8 +17,10 @@ export const initStage = (parent: HTMLDivElement | null) => {
 
   const container = new MainContainer(parent);
   const viewport = new Viewport(app);
+  const bricksLayer = new BricksLayer();
 
   container.addChild(createGrids());
+  container.addChild(bricksLayer);
   viewport.addChild(container);
   app.stage.addChild(viewport);
 
@@ -35,23 +38,33 @@ export const initStage = (parent: HTMLDivElement | null) => {
 
 export const listenCreatingBrickPlaced = (container: MainContainer) => {
   store.subscribe((state) => {
-    if (!state.editor.creating) {
+    if (state.editor.mode !== MODE.CREATE) {
       container.off("click");
       return;
     }
     container.on("click", (e) => {
       // 获取相对container 点击位置
       const pointerInContainer = container.toLocal(e.global);
-      const brickType = state.editor.creating;
+      const brickType = store.getState().editor.creating;
       if (!brickType) return;
       const data = presetBrickTypeData[brickType];
       const leftTop = new PIXI.Point(
         pointerInContainer.x - (data[0].length * CELL_SIZE) / 2,
         pointerInContainer.y - (data.length * CELL_SIZE) / 2
       );
+      const notInRange =
+        leftTop.x < 0 ||
+        leftTop.x > CANVAS_WIDTH ||
+        leftTop.y < 0 ||
+        leftTop.y > CANVAS_HEIGHT;
+      if (notInRange) return;
+
+      if (leftTop.x % CELL_SIZE > CELL_SIZE / 2) leftTop.x += CELL_SIZE;
+      if (leftTop.y % CELL_SIZE > CELL_SIZE / 2) leftTop.y += CELL_SIZE;
+
       const r = Math.floor(leftTop.y / CELL_SIZE);
       const c = Math.floor(leftTop.x / CELL_SIZE);
-      state.createBrick(brickType, [r, c]);
+      state.createBrick(brickType, [c, r]);
     });
   });
 };
@@ -86,9 +99,9 @@ export const listenCreatingBrickMove = (
 
       const notInRange =
         pointerInContainer.x < 0 ||
-        pointerInContainer.x > container.width ||
+        pointerInContainer.x > CANVAS_WIDTH ||
         pointerInContainer.y < 0 ||
-        pointerInContainer.y > container.height;
+        pointerInContainer.y > CANVAS_HEIGHT;
 
       newBrick.tint = notInRange ? 0x666666 : 0xffffff;
     });

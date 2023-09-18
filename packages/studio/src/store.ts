@@ -28,7 +28,6 @@ export const store = createStore<States>()((set) => ({
       bricks: { ...state.bricks, [nanoid()]: { type, position } },
       editor: { creating: null, mode: MODE.NORMAL },
     }));
-    console.log(store.getState());
   },
 }));
 
