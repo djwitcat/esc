@@ -7,7 +7,6 @@ export class Viewport extends PixiViewport {
     super({
       events: app.renderer.events,
     });
-    this.eventMode = "static";
     const { subscribe } = store;
     const unsub = subscribe((s) => {
       this.pause = s.editor.mode !== MODE.HAND;
@@ -20,7 +19,10 @@ export class Viewport extends PixiViewport {
       })
       .setZoom(0.6, true);
 
-    this.pause = true;
     this.on("destroyed", unsub);
+
+    // HACK: 创建时强制update初始化后禁用viewport
+    this.update(0);
+    this.pause = true;
   }
 }

@@ -1,4 +1,4 @@
-export const enum BRICK {
+export const enum BrickType {
   A = "A",
   B = "B",
   C = "C",
@@ -10,54 +10,54 @@ export const enum BRICK {
   I = "I",
 }
 
-export const presetBrickInfo: {
-  [key in BRICK]: { name: BRICK; color: string };
+export const presetBrickTypeInfo: {
+  [key in BrickType]: { name: BrickType; color: string };
 } = {
-  [BRICK.A]: { name: BRICK.A, color: "#79c711" },
-  [BRICK.B]: { name: BRICK.B, color: "#ff8c00" },
-  [BRICK.C]: { name: BRICK.C, color: "#00b0f4" },
-  [BRICK.D]: { name: BRICK.D, color: "#0076c1" },
-  [BRICK.E]: { name: BRICK.E, color: "#d65d00" },
-  [BRICK.F]: { name: BRICK.F, color: "#ff008d" },
-  [BRICK.G]: { name: BRICK.G, color: "#ff0006" },
-  [BRICK.H]: { name: BRICK.H, color: "#b200ff" },
-  [BRICK.I]: { name: BRICK.I, color: "#fff000" },
+  [BrickType.A]: { name: BrickType.A, color: "#79c711" },
+  [BrickType.B]: { name: BrickType.B, color: "#ff8c00" },
+  [BrickType.C]: { name: BrickType.C, color: "#00b0f4" },
+  [BrickType.D]: { name: BrickType.D, color: "#0076c1" },
+  [BrickType.E]: { name: BrickType.E, color: "#d65d00" },
+  [BrickType.F]: { name: BrickType.F, color: "#ff008d" },
+  [BrickType.G]: { name: BrickType.G, color: "#ff0006" },
+  [BrickType.H]: { name: BrickType.H, color: "#b200ff" },
+  [BrickType.I]: { name: BrickType.I, color: "#fff000" },
 };
 
-export const presetBrickData: {
-  [key in BRICK]: (0 | 1)[][];
+export const presetBrickTypeData: {
+  [key in BrickType]: (0 | 1)[][];
 } = {
-  [BRICK.A]: [[1, 1, 1]],
-  [BRICK.B]: [
+  [BrickType.A]: [[1, 1, 1]],
+  [BrickType.B]: [
     [1, 1, 1],
     [0, 1, 0],
   ],
-  [BRICK.C]: [
+  [BrickType.C]: [
     [1, 1, 1],
     [1, 0, 1],
   ],
-  [BRICK.D]: [
+  [BrickType.D]: [
     [1, 1],
     [1, 0],
   ],
-  [BRICK.E]: [
+  [BrickType.E]: [
     [1, 1],
     [0, 1],
   ],
-  [BRICK.F]: [
+  [BrickType.F]: [
     [1, 1, 1, 1],
     [0, 1, 0, 0],
   ],
-  [BRICK.G]: [
+  [BrickType.G]: [
     [1, 1, 1, 1],
     [0, 0, 1, 0],
   ],
-  [BRICK.H]: [
+  [BrickType.H]: [
     [1, 1],
     [1, 0],
     [1, 0],
   ],
-  [BRICK.I]: [
+  [BrickType.I]: [
     [1, 1],
     [0, 1],
     [0, 1],

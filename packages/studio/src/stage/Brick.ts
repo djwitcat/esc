@@ -1,12 +1,16 @@
 import { Graphics } from "pixi.js";
-import { BRICK, presetBrickData, presetBrickInfo } from "../presets";
+import {
+  BrickType,
+  presetBrickTypeData,
+  presetBrickTypeInfo,
+} from "../presets";
 import { CELL_SIZE } from "../constants";
 
 export class Brick extends Graphics {
-  constructor(type: BRICK) {
+  constructor(type: BrickType) {
     super();
-    const data = presetBrickData[type];
-    const info = presetBrickInfo[type];
+    const data = presetBrickTypeData[type];
+    const info = presetBrickTypeInfo[type];
 
     this.create(data, info.color);
   }

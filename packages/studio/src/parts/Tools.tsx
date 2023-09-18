@@ -16,7 +16,7 @@ import InfoIcon from "@spectrum-icons/workflow/Info";
 
 import { MODE, store, useBoundedStore } from "../store";
 import { useHotkeys } from "react-hotkeys-hook";
-import { BRICK, presetBrickInfo } from "../presets";
+import { BrickType, presetBrickTypeInfo } from "../presets";
 import { useState } from "react";
 import { Key } from "ts-key-enum";
 
@@ -49,10 +49,10 @@ export const Tools = () => {
    * 砖块创建快捷键
    */
   useHotkeys(
-    Object.keys(presetBrickInfo).map((k) => `${Key.Shift}+${k}`),
+    Object.keys(presetBrickTypeInfo).map((k) => `${Key.Shift}+${k}`),
     ({ key }) =>
       store.setState(() => ({
-        editor: { mode: MODE.CREATE, creating: key as BRICK },
+        editor: { mode: MODE.CREATE, creating: key as BrickType },
       }))
   );
 
@@ -69,7 +69,7 @@ export const Tools = () => {
    */
   useHotkeys("n", () => setShowCreatingMenu(true));
 
-  const setCreatingBrickType = (type: BRICK) => {
+  const setCreatingBrickType = (type: BrickType) => {
     store.setState(() => ({
       editor: { mode: MODE.CREATE, creating: type },
     }));
@@ -86,8 +86,8 @@ export const Tools = () => {
           <Add />
           <Text>新砖块</Text>
         </ActionButton>
-        <Menu onAction={(k) => setCreatingBrickType(k as BRICK)}>
-          {Object.values(presetBrickInfo).map((i) => (
+        <Menu onAction={(k) => setCreatingBrickType(k as BrickType)}>
+          {Object.values(presetBrickTypeInfo).map((i) => (
             <Item textValue={i.name} key={i.name}>
               <div
                 className={styles.color}
