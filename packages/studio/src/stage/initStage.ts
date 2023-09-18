@@ -4,6 +4,7 @@ import { MainContainer } from "./MainContainer";
 import { createGrids } from "./nonInteractElements";
 import { Brick } from "./Brick";
 import { store } from "../store";
+import { CELL_SIZE } from "../constants";
 
 export const initStage = (parent: HTMLDivElement | null) => {
   if (!parent) return () => {};
@@ -21,7 +22,7 @@ export const initStage = (parent: HTMLDivElement | null) => {
 
   parent.appendChild(app.view);
 
-  listenCreatingBrickMove(viewport);
+  listenCreatingBrickMove(viewport, container);
 
   return () => {
     container.destroy(true);
@@ -30,7 +31,10 @@ export const initStage = (parent: HTMLDivElement | null) => {
   };
 };
 
-export const listenCreatingBrickMove = (viewport: Viewport) => {
+export const listenCreatingBrickMove = (
+  viewport: Viewport,
+  container: MainContainer
+) => {
   let newBrick: Brick | null = null;
   store.subscribe((state) => {
     if (newBrick) {
@@ -46,8 +50,26 @@ export const listenCreatingBrickMove = (viewport: Viewport) => {
     viewport.on("globalpointermove", (e) => {
       if (!newBrick) return;
       const worldPos = viewport.toWorld(e.global);
-      newBrick.x = worldPos.x;
-      newBrick.y = worldPos.y;
+      newBrick.x = worldPos.x - newBrick.width / 2;
+      newBrick.y = worldPos.y - newBrick.height / 2;
+
+      const pointerInContainer = container.toLocal(e.global);
+      pointerInContainer.x -= newBrick.width / 2;
+      pointerInContainer.y -= newBrick.height / 2;
+
+      const notInRange =
+        pointerInContainer.x < 0 ||
+        pointerInContainer.x > container.width ||
+        pointerInContainer.y < 0 ||
+        pointerInContainer.y > container.height;
+      newBrick.tint = 0xffffff;
+      if (notInRange) {
+        newBrick.tint = 0x666666;
+        return;
+      }
+
+      // const r = Math.floor(pointerInContainer.y / CELL_SIZE);
+      // const c = Math.floor(pointerInContainer.x / CELL_SIZE);
     });
   });
 };
