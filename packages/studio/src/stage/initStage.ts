@@ -5,7 +5,7 @@ import { createGrids } from "./nonInteractElements";
 import { Brick } from "./Brick";
 import { MODE, store } from "../store";
 import { presetBrickTypeData } from "../presets";
-import { CANVAS_HEIGHT, CANVAS_WIDTH, CELL_SIZE } from "../constants";
+import { CELL_SIZE } from "../constants";
 import { BricksLayer } from "./BricksLayer";
 
 export const initStage = (parent: HTMLDivElement | null) => {
@@ -52,19 +52,9 @@ export const listenCreatingBrickPlaced = (container: MainContainer) => {
         pointerInContainer.x - (data[0].length * CELL_SIZE) / 2,
         pointerInContainer.y - (data.length * CELL_SIZE) / 2
       );
-      const notInRange =
-        leftTop.x < 0 ||
-        leftTop.x > CANVAS_WIDTH ||
-        leftTop.y < 0 ||
-        leftTop.y > CANVAS_HEIGHT;
-      if (notInRange) return;
-
-      if (leftTop.x % CELL_SIZE > CELL_SIZE / 2) leftTop.x += CELL_SIZE;
-      if (leftTop.y % CELL_SIZE > CELL_SIZE / 2) leftTop.y += CELL_SIZE;
-
-      const r = Math.floor(leftTop.y / CELL_SIZE);
-      const c = Math.floor(leftTop.x / CELL_SIZE);
-      state.createBrick(brickType, [c, r]);
+      const coordinate = Brick.computeCoordinate(leftTop);
+      if (!coordinate) return;
+      state.createBrick(brickType, coordinate);
     });
   });
 };
@@ -89,21 +79,20 @@ export const listenCreatingBrickMove = (
     viewport.addChild(newBrick);
     viewport.on("globalpointermove", (e) => {
       if (!newBrick) return;
+
+      // 让砖块中心和鼠标位置重合
       const worldPos = viewport.toWorld(e.global);
       newBrick.x = worldPos.x - newBrick.width / 2;
       newBrick.y = worldPos.y - newBrick.height / 2;
 
+      // 获取指针在container中的位置
       const pointerInContainer = container.toLocal(e.global);
       pointerInContainer.x -= newBrick.width / 2;
       pointerInContainer.y -= newBrick.height / 2;
 
-      const notInRange =
-        pointerInContainer.x < 0 ||
-        pointerInContainer.x > CANVAS_WIDTH ||
-        pointerInContainer.y < 0 ||
-        pointerInContainer.y > CANVAS_HEIGHT;
-
-      newBrick.tint = notInRange ? 0x666666 : 0xffffff;
+      newBrick.tint = Brick.isOutOfRange(pointerInContainer)
+        ? 0x666666
+        : 0xffffff;
     });
   });
 };

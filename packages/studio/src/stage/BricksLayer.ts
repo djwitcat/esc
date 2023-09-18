@@ -1,11 +1,15 @@
-import { Container } from "pixi.js";
+import { Container, Rectangle } from "pixi.js";
 import { MODE, store } from "../store";
 import { PlacedBrick } from "./PlacedBrick";
-import { CELL_SIZE } from "../constants";
+import { CANVAS_HEIGHT, CANVAS_WIDTH, CELL_SIZE } from "../constants";
 
 export class BricksLayer extends Container {
   constructor() {
     super();
+
+    this.eventMode = "static";
+    this.hitArea = new Rectangle(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
     const unsub = store.subscribe((cur, prev) => {
       if (prev.mode !== MODE.CREATE) return;
       const curBricksKeys = Object.keys(cur.bricks);

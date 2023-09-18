@@ -1,10 +1,10 @@
-import { Graphics } from "pixi.js";
+import { Graphics, Point } from "pixi.js";
 import {
   BrickType,
   presetBrickTypeData,
   presetBrickTypeInfo,
 } from "../presets";
-import { CELL_SIZE } from "../constants";
+import { CANVAS_HEIGHT, CANVAS_WIDTH, CELL_SIZE } from "../constants";
 
 export class Brick extends Graphics {
   constructor(type: BrickType) {
@@ -25,5 +25,25 @@ export class Brick extends Graphics {
       }
     }
     this.endFill();
+  }
+
+  static computeCoordinate(leftTop: Point): [number, number] | undefined {
+    if (this.isOutOfRange(leftTop)) return;
+
+    if (leftTop.x % CELL_SIZE > CELL_SIZE / 2) leftTop.x += CELL_SIZE;
+    if (leftTop.y % CELL_SIZE > CELL_SIZE / 2) leftTop.y += CELL_SIZE;
+
+    const r = Math.floor(leftTop.y / CELL_SIZE);
+    const c = Math.floor(leftTop.x / CELL_SIZE);
+    return [c, r];
+  }
+
+  static isOutOfRange(point: Point) {
+    return (
+      point.x < 0 ||
+      point.x > CANVAS_WIDTH ||
+      point.y < 0 ||
+      point.y > CANVAS_HEIGHT
+    );
   }
 }

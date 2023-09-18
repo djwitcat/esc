@@ -9,8 +9,15 @@ export class PlacedBrick extends Brick {
     super(type);
     this.eventMode = "static";
     this.id = id;
-
-    this.on("pointerdown", () => store.setState({ selectedBrick: this.id }));
+    this.on("pointerdown", () => {
+      store.setState({ selectedBrick: this.id });
+      this.parent.on("pointermove", (e) => {
+        // 获取指针在container中的位置
+        const pointerInContainer = this.parent.toLocal(e.global);
+        console.log(pointerInContainer);
+      });
+      this.parent.once("pointerup", () => this.parent.off("pointermove"));
+    });
 
     this.on(
       "destroyed",
