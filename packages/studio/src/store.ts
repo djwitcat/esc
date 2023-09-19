@@ -6,6 +6,7 @@ import { immer } from "zustand/middleware/immer";
 import { Map } from "./types";
 import { devtools } from "zustand/middleware";
 import { CANVAS_HEIGHT, CELL_SIZE } from "./constants";
+import { ToastQueue } from "@react-spectrum/toast";
 
 const generateMap = (bricks: States["bricks"]) => {
   const map: Map = [];
@@ -27,6 +28,22 @@ const generateMap = (bricks: States["bricks"]) => {
     }
   }
   return map;
+};
+
+export const isOverlapped = (
+  map: Map,
+  data: number[][],
+  position: [number, number]
+) => {
+  for (let i = 0; i < data.length; i++) {
+    for (let j = 0; j < data[i].length; j++) {
+      if (data[i][j] && map[position[1] + i][position[0] + j]) {
+        ToastQueue.neutral("重叠了,砖块不能重叠。", { timeout: 300 });
+        return true;
+      }
+    }
+  }
+  return false;
 };
 
 export enum MODE {
@@ -65,7 +82,10 @@ export const store = createStore<States>()(
       mode: MODE.NORMAL,
       creating: null,
       selectedBrick: null,
-      createBrick(type, position) {
+      createBrick: (type, position) => {
+        if (isOverlapped(get().getMap(), presetBrickTypeData[type], position))
+          return;
+
         set((state) => {
           state.bricks[nanoid()] = { type, position };
           state.creating = null;

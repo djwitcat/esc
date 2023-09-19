@@ -1,6 +1,6 @@
 import { Point } from "pixi.js";
-import { BrickType } from "../presets";
-import { MODE, store } from "../store";
+import { BrickType, presetBrickTypeData } from "../presets";
+import { MODE, isOverlapped, store } from "../store";
 import { Brick } from "./Brick";
 import { CELL_SIZE } from "../constants";
 
@@ -12,6 +12,7 @@ export class PlacedBrick extends Brick {
     this.eventMode = "static";
     this.id = id;
     this.on("pointerdown", () => {
+      if (store.getState().mode !== MODE.NORMAL) return;
       store.setState({ selectedBrick: this.id, mode: MODE.DRAG });
       const unsub = store.subscribe((cur) => {
         if (cur.mode === MODE.DRAG) return;
@@ -29,10 +30,25 @@ export class PlacedBrick extends Brick {
         const coordinate = Brick.computeCoordinate(
           new Point(x - this.width / 2, y - this.height / 2)
         );
-        if (!coordinate) return;
         store.setState((state) => {
           state.mode = MODE.NORMAL;
-          state.bricks[this.id].position = coordinate;
+          if (coordinate) {
+            const position = state.bricks[this.id].position;
+            const map = state.getMap();
+
+            for (let i = 0; i < presetBrickTypeData[type].length; i++) {
+              for (let j = 0; j < presetBrickTypeData[type][i].length; j++) {
+                if (presetBrickTypeData[type][i][j]) {
+                  map[position[1] + i][position[0] + j] = null;
+                }
+              }
+            }
+
+            const data = presetBrickTypeData[type];
+            const overlapped = isOverlapped(map, data, coordinate);
+            console.log(overlapped);
+            if (!overlapped) state.bricks[this.id].position = coordinate;
+          }
         });
       });
     });
