@@ -28,6 +28,7 @@ export const Tools = () => {
     store.setState(() => ({
       mode: isHandMode ? MODE.NORMAL : MODE.HAND,
       creating: null,
+      selectedBrick: null,
     }));
 
   /**
@@ -47,6 +48,12 @@ export const Tools = () => {
           selectedBrick: null,
         });
         break;
+      case MODE.DRAG:
+        store.setState({
+          selectedBrick: null,
+          mode: MODE.NORMAL,
+        });
+        break;
     }
   });
 
@@ -59,6 +66,7 @@ export const Tools = () => {
       store.setState(() => ({
         mode: MODE.CREATE,
         creating: key as BrickType,
+        selectedBrick: null,
       }))
   );
 
@@ -91,6 +99,7 @@ export const Tools = () => {
     store.setState(() => ({
       mode: MODE.CREATE,
       creating: type,
+      selectedBrick: null,
     }));
   };
 
@@ -100,6 +109,13 @@ export const Tools = () => {
       <ToggleButton isSelected={isHandMode} onPress={() => toggle()}>
         <Hand />
       </ToggleButton>
+      <ActionButton
+        onPress={() => {
+          console.log(store.getState().getMap());
+        }}
+      >
+        <Text>打印二维数组</Text>
+      </ActionButton>
       <MenuTrigger isOpen={showCreatingMenu} onOpenChange={setShowCreatingMenu}>
         <ActionButton>
           <Add />
