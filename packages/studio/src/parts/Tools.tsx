@@ -109,13 +109,6 @@ export const Tools = () => {
       <ToggleButton isSelected={isHandMode} onPress={() => toggle()}>
         <Hand />
       </ToggleButton>
-      <ActionButton
-        onPress={() => {
-          console.log(store.getState().getMap());
-        }}
-      >
-        <Text>打印二维数组</Text>
-      </ActionButton>
       <MenuTrigger isOpen={showCreatingMenu} onOpenChange={setShowCreatingMenu}>
         <ActionButton>
           <Add />

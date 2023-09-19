@@ -46,7 +46,6 @@ export class PlacedBrick extends Brick {
 
             const data = presetBrickTypeData[type];
             const overlapped = isOverlapped(map, data, coordinate);
-            console.log(overlapped);
             if (!overlapped) state.bricks[this.id].position = coordinate;
           }
         });
