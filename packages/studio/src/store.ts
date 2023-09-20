@@ -63,6 +63,10 @@ export enum MODE {
    * 正在移动砖块
    */
   DRAG,
+  /**
+   * 正在标注连消区
+   */
+  MARK,
 }
 
 interface States {

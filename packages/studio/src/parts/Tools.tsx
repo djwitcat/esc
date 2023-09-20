@@ -13,6 +13,7 @@ import {
 import Add from "@spectrum-icons/workflow/Add";
 import Hand from "@spectrum-icons/workflow/Hand";
 import InfoIcon from "@spectrum-icons/workflow/Info";
+import Rect from "@spectrum-icons/workflow/RectSelect";
 
 import { MODE, store, useBoundedStore } from "../store";
 import { useHotkeys } from "react-hotkeys-hook";
@@ -24,9 +25,11 @@ export const Tools = () => {
   const [showCreatingMenu, setShowCreatingMenu] = useState(false);
 
   const isHandMode = useBoundedStore((states) => states.mode === MODE.HAND);
-  const toggle = () =>
+  const isMarkMode = useBoundedStore((states) => states.mode === MODE.MARK);
+
+  const toggle = (mode: MODE) =>
     store.setState(() => ({
-      mode: isHandMode ? MODE.NORMAL : MODE.HAND,
+      mode: store.getState().mode === mode ? MODE.NORMAL : mode,
       creating: null,
       selectedBrick: null,
     }));
@@ -85,10 +88,15 @@ export const Tools = () => {
   /**
    * 空格拖拽快捷键
    */
-  useHotkeys("space", (e) => !e.repeat && toggle(), {
+  useHotkeys("space", (e) => !e.repeat && toggle(MODE.HAND), {
     keydown: true,
     keyup: true,
   });
+
+  /**
+   * 框选快捷键
+   */
+  useHotkeys("f", () => toggle(MODE.MARK));
 
   /**
    * 砖块菜单快捷键
@@ -106,8 +114,11 @@ export const Tools = () => {
   return (
     <div className={styles.lb}>
       <Info />
-      <ToggleButton isSelected={isHandMode} onPress={() => toggle()}>
+      <ToggleButton isSelected={isHandMode} onPress={() => toggle(MODE.HAND)}>
         <Hand />
+      </ToggleButton>
+      <ToggleButton isSelected={isMarkMode} onPress={() => toggle(MODE.MARK)}>
+        <Rect />
       </ToggleButton>
       <MenuTrigger isOpen={showCreatingMenu} onOpenChange={setShowCreatingMenu}>
         <ActionButton>
