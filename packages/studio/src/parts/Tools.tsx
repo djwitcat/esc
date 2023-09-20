@@ -9,6 +9,8 @@ import {
   Menu,
   Item,
   Keyboard,
+  Tooltip,
+  TooltipTrigger,
 } from "@adobe/react-spectrum";
 import Add from "@spectrum-icons/workflow/Add";
 import Hand from "@spectrum-icons/workflow/Hand";
@@ -114,12 +116,20 @@ export const Tools = () => {
   return (
     <div className={styles.lb}>
       <Info />
-      <ToggleButton isSelected={isHandMode} onPress={() => toggle(MODE.HAND)}>
-        <Hand />
-      </ToggleButton>
-      <ToggleButton isSelected={isMarkMode} onPress={() => toggle(MODE.MARK)}>
-        <Rect />
-      </ToggleButton>
+      <TooltipTrigger>
+        <ToggleButton isSelected={isHandMode} onPress={() => toggle(MODE.HAND)}>
+          <Hand />
+        </ToggleButton>
+        <Tooltip>移动画布</Tooltip>
+      </TooltipTrigger>
+
+      <TooltipTrigger>
+        <ToggleButton isSelected={isMarkMode} onPress={() => toggle(MODE.MARK)}>
+          <Rect />
+        </ToggleButton>
+        <Tooltip>连消区标注</Tooltip>
+      </TooltipTrigger>
+
       <MenuTrigger isOpen={showCreatingMenu} onOpenChange={setShowCreatingMenu}>
         <ActionButton>
           <Add />
