@@ -3,6 +3,7 @@ import { BrickType, presetBrickTypeData } from "../presets";
 import { MODE, isOverlapped, store } from "../store";
 import { Brick } from "./Brick";
 import { CELL_SIZE } from "../constants";
+import { computeCoordinate } from "./utils";
 
 export class PlacedBrick extends Brick {
   id: string;
@@ -27,7 +28,7 @@ export class PlacedBrick extends Brick {
         unsub();
         this.parent.off("pointermove");
         const { x, y } = this.parent.toLocal(e.global);
-        const coordinate = Brick.computeCoordinate(
+        const coordinate = computeCoordinate(
           new Point(x - this.width / 2, y - this.height / 2)
         );
         store.setState((state) => {

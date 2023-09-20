@@ -73,6 +73,7 @@ interface States {
   bricks: { [pos: string]: BrickDataBase };
   getMap: () => Map;
   createBrick: (type: BrickType, position: [number, number]) => void;
+  createArea: (a: [number, number], b: [number, number]) => void;
   mode: MODE;
   creating: BrickType | null;
   selectedBrick: string | null;
@@ -95,6 +96,10 @@ export const store = createStore<States>()(
           state.creating = null;
           state.mode = MODE.NORMAL;
         });
+      },
+      createArea: (a, b) => {
+        console.log(a, b);
+        // to be implemented.
       },
     }))
   )
