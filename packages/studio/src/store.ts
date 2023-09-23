@@ -1,6 +1,6 @@
 import { createStore, useStore } from "zustand";
 import { BrickType, presetBrickTypeData } from "./presets";
-import { BrickDataBase } from "./types";
+import { Area, BrickDataBase } from "./types";
 import { nanoid } from "nanoid";
 import { immer } from "zustand/middleware/immer";
 import { Map } from "./types";
@@ -46,6 +46,41 @@ export const isOverlapped = (
   return false;
 };
 
+const computeSizeByLTRB = (area: Area) => {
+  const { lt, rb } = area;
+  return (rb[0] - lt[0]) * (rb[1] - lt[1]);
+};
+
+const isContain = (
+  /**
+   * 大的矩形
+   */
+  a: Area,
+  /**
+   * 小的
+   */
+  b: Area
+) =>
+  b.lt[0] >= a.lt[0] &&
+  b.lt[1] >= a.lt[1] &&
+  b.rb[0] <= a.rb[0] &&
+  b.rb[1] <= a.rb[1];
+
+export const computeAreaRelations = (areas: { [id: string]: Area }) => {
+  const sorted = Object.entries(areas).sort(
+    (a, b) => computeSizeByLTRB(b[1]) - computeSizeByLTRB(a[1])
+  );
+  // 执行遍历，判断其余区域是否在当前区域内
+  for (let i = 0; i < sorted.length; i++) {
+    const [id, area] = sorted[i];
+    for (let j = i + 1; j < sorted.length; j++) {
+      const [id2, area2] = sorted[j];
+      if (isContain(area, area2)) areas[id2].parent = id;
+    }
+  }
+  return areas;
+};
+
 export enum MODE {
   /**
    * 普通模式
@@ -70,10 +105,12 @@ export enum MODE {
 }
 
 interface States {
-  bricks: { [pos: string]: BrickDataBase };
+  bricks: { [id: string]: BrickDataBase };
+  areas: { [id: string]: Area };
   getMap: () => Map;
   createBrick: (type: BrickType, position: [number, number]) => void;
   createArea: (a: [number, number], b: [number, number]) => void;
+  deleteArea: (id: string) => void;
   mode: MODE;
   creating: BrickType | null;
   selectedBrick: string | null;
@@ -83,6 +120,7 @@ export const store = createStore<States>()(
   devtools(
     immer((set, get) => ({
       bricks: {},
+      areas: {},
       getMap: () => generateMap(get().bricks),
       mode: MODE.NORMAL,
       creating: null,
@@ -98,8 +136,23 @@ export const store = createStore<States>()(
         });
       },
       createArea: (a, b) => {
-        console.log(a, b);
-        // to be implemented.
+        set((state) => {
+          state.areas = computeAreaRelations({
+            ...state.areas,
+            [nanoid()]: {
+              deep: 0,
+              lt: a,
+              rb: b,
+              parent: null,
+            },
+          });
+        });
+      },
+      deleteArea: (id) => {
+        set((state) => {
+          delete state.areas[id];
+          state.areas = computeAreaRelations(state.areas);
+        });
       },
     }))
   )

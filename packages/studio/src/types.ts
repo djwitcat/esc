@@ -10,3 +10,10 @@ export interface BrickData extends BrickDataBase {
 }
 
 export type Map = (null | string)[][];
+
+export interface Area {
+  deep: number;
+  lt: [number, number];
+  rb: [number, number];
+  parent: string | null;
+}
