@@ -59,6 +59,11 @@ export const Tools = () => {
           mode: MODE.NORMAL,
         });
         break;
+      case MODE.MARK:
+        store.setState({
+          mode: MODE.NORMAL,
+        });
+        break;
     }
   });
 
