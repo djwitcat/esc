@@ -63,3 +63,15 @@ export const presetBrickTypeData: {
     [0, 1],
   ],
 };
+
+export const areaBgColors = [
+  "#79c711",
+  "#ff8c00",
+  "#00b0f4",
+  "#0076c1",
+  "#d65d00",
+  "#ff008d",
+  "#ff0006",
+  "#b200ff",
+  "#fff000",
+];

@@ -7,6 +7,7 @@ import { Viewport } from "./Viewport";
 import { BricksLayer } from "./BricksLayer";
 import { SelectIndicator } from "./SelectIndicator";
 import { computeCoordinate, isOutOfRange } from "./utils";
+import { AreasLayer } from "./AreasLayer";
 
 export class MainContainer extends Container {
   constructor(parent: HTMLDivElement, viewport: Viewport) {
@@ -15,6 +16,7 @@ export class MainContainer extends Container {
     this.eventMode = "static";
     this.addChild(createGrids());
     this.addChild(new BricksLayer());
+    this.addChild(new AreasLayer());
     this.addChild(new SelectIndicator(this));
     this.listenCreatingBrickMove(viewport);
     this.listenCreatingBrickPlaced();
