@@ -136,6 +136,12 @@ export const store = createStore<States>()(
         });
       },
       createArea: (a, b) => {
+        if (b[0] - a[0] < 2 || b[1] - a[1] < 3) {
+          ToastQueue.neutral("区域太小了，至少要3x2才能形成连消", {
+            timeout: 300,
+          });
+          return;
+        }
         set((state) => {
           state.areas = computeAreaRelations({
             ...state.areas,

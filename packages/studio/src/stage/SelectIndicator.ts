@@ -33,10 +33,9 @@ export class SelectIndicator extends Graphics {
         true
       );
       const b = computeCoordinate(new Point(dragEndAt.x, dragEndAt.y), true);
-      if (!a || !b) return;
-      if (a[0] === b[0] || a[1] === b[1]) return;
-      store.getState().createArea(a, b);
       this.dragStartAt = null;
+      if (!a || !b) return;
+      store.getState().createArea(a, b);
     });
   }
 }
