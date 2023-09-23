@@ -75,7 +75,9 @@ export const computeAreaRelations = (areas: { [id: string]: Area }) => {
     const [id, area] = sorted[i];
     for (let j = i + 1; j < sorted.length; j++) {
       const [id2, area2] = sorted[j];
-      if (isContain(area, area2)) areas[id2].parent = id;
+      if (!isContain(area, area2)) return;
+      areas[id2].parent = id;
+      areas[id2].deep = areas[id].deep + 1;
     }
   }
   return areas;
