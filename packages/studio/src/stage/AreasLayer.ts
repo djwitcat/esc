@@ -7,10 +7,10 @@ export class AreasLayer extends Container {
   constructor() {
     super();
 
-    this.eventMode = "static";
     this.hitArea = new Rectangle(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
     this.sortableChildren = true;
     const unsub = store.subscribe((cur, prev) => {
+      this.eventMode = cur.mode === MODE.MARK ? "static" : "none";
       if (prev.mode !== MODE.MARK) return;
       const curAreasKeys = Object.keys(cur.areas);
       const prevAreasKeys = Object.keys(prev.areas);
